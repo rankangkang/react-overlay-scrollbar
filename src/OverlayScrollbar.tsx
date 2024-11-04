@@ -1,25 +1,26 @@
-import React, { memo, ReactNode, ComponentProps, useRef, RefObject } from 'react'
+import React, { memo, ReactNode, ComponentProps, useRef, RefObject, ElementType, useMemo } from 'react'
 import { useMergeRefs } from './useMergeRefs'
-import { useOverlayScrollbar } from './useOverlayScrollbar'
+import { useOverlayScrollbar, UseOverlayScrollbarOptions } from './useOverlayScrollbar'
 import 'overlayscrollbars/styles/overlayscrollbars.css'
 
-export type AsCProps<As extends React.ElementType = 'div'> = { as?: As } & ComponentProps<As>
+export type OverlayScrollbarProps<As extends ElementType> = {
+  as?: As
+  scrollOptions?: Pick<UseOverlayScrollbarOptions, 'options' | 'eventListeners'>
 
-export interface OverlayScrollbarProps extends AsCProps {
   children?: ReactNode
-}
+} & Omit<ComponentProps<As>, 'children'>
 
 /**
  * 自己作为滚动容器
  */
-export function OverlayScrollbar(props: OverlayScrollbarProps) {
-  const { children, as = 'div', ref, ...asProps } = props
+export function OverlayScrollbar<As extends ElementType>(props: OverlayScrollbarProps<As>) {
+  const { children, as = 'div', ref, scrollOptions, ...asProps } = props
 
   const targetRef = useRef<HTMLElement>(null)
   const viewportRef = useRef<HTMLElement>(null)
   const nextRef = useMergeRefs(ref as RefObject<HTMLElement>, targetRef)
 
-  useOverlayScrollbar({ targetRef, viewportRef })
+  useOverlayScrollbar(useMemo(() => ({ targetRef, viewportRef, ...scrollOptions }), [scrollOptions]))
 
   return React.createElement(
     as,

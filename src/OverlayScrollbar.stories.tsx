@@ -14,11 +14,13 @@ type Story = StoryObj<typeof OverlayScrollbar>
 export const FirstStory: Story = {
   args: {
     //👇 The args you need here will depend on your component
+    as: 'section',
+    className: 'w-32 h-[300px] overflow-scroll',
   },
 
   render: (args) => {
     return (
-      <OverlayScrollbar {...args} as="div" className="w-32 h-[300px] overflow-scroll">
+      <OverlayScrollbar {...args}>
         {Array(50)
           .fill(0)
           .map((_, index) => {
@@ -39,11 +41,13 @@ export const FirstStory: Story = {
 export const SecondStory: Story = {
   args: {
     //👇 The args you need here will depend on your component
+    as: 'main',
+    className: 'w-32 h-[300px] overflow-scroll',
   },
 
   render: (args) => {
     return (
-      <OverlayScrollbar {...args} as="div" className="w-32 h-[300px] overflow-scroll">
+      <OverlayScrollbar {...args}>
         <div>
           {Array(50)
             .fill(0)
